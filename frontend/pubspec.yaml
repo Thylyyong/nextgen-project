@@ -33,9 +33,10 @@ dependencies:
   # ── DI ───────────────────────────────────────
   get_it: ^8.0.3
 
-  # ── Utilities ────────────────────────────────
+  # ── Utilities ────────────────────────────────────────────────────────────
   logger: ^2.5.0
   intl: ^0.20.2
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -44,17 +45,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-  fonts:
-    - family: Outfit
-      fonts:
-        - asset: fonts/Outfit-Regular.ttf
-          weight: 400
-        - asset: fonts/Outfit-Medium.ttf
-          weight: 500
-        - asset: fonts/Outfit-SemiBold.ttf
-          weight: 600
-        - asset: fonts/Outfit-Bold.ttf
-          weight: 700
-        - asset: fonts/Outfit-ExtraBold.ttf
-          weight: 800
+  # No local font files needed — Outfit is loaded via google_fonts package
