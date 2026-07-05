@@ -49,4 +49,11 @@ class AuthService {
   Future<void> logout() async {
     await _storage.clearToken();
   }
+
+  // ── Profile ─────────────────────────────────────────────────────────────────
+  /// Fetches the profile of the currently authenticated user.
+  Future<UserModel> getProfile() async {
+    final response = await _api.get<Map<String, dynamic>>('/auth/me');
+    return UserModel.fromJson(response.data!);
+  }
 }

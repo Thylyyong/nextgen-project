@@ -40,4 +40,27 @@ class ProductService {
     final response = await _api.get<Map<String, dynamic>>('/products/$id');
     return Product.fromJson(response.data!);
   }
+
+  /// Creates a new product.
+  Future<Product> createProduct(Product product) async {
+    final response = await _api.post<Map<String, dynamic>>(
+      '/products',
+      data: product.toJson(),
+    );
+    return Product.fromJson(response.data!);
+  }
+
+  /// Updates an existing product.
+  Future<Product> updateProduct(Product product) async {
+    final response = await _api.put<Map<String, dynamic>>(
+      '/products/${product.id}',
+      data: product.toJson(),
+    );
+    return Product.fromJson(response.data!);
+  }
+
+  /// Deletes a product by ID.
+  Future<void> deleteProduct(int id) async {
+    await _api.delete<dynamic>('/products/$id');
+  }
 }

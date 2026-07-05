@@ -129,6 +129,24 @@ func (ac *AuthController) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, authResponse{Token: token, User: user})
 }
 
+// ── GetProfile ────────────────────────────────────────────────────────────────
+// GET /api/auth/me (protected)
+func (ac *AuthController) GetProfile(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	var user models.User
+	if err := ac.DB.First(&user, userID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+}
+
 // ─────────────────────────────────────────────
 // Internal helpers
 // ─────────────────────────────────────────────

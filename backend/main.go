@@ -85,11 +85,17 @@ func main() {
 		protected := api.Group("/")
 		protected.Use(middleware.AuthMiddleware())
 		{
+			// Auth
+			protected.GET("/auth/me", authCtrl.GetProfile)
+
 			// Products (write / single-fetch)
 			protected.GET("/products/:id", productCtrl.GetProductByID)
 			protected.POST("/products", productCtrl.CreateProduct)
+			protected.PUT("/products/:id", productCtrl.UpdateProduct)
+			protected.DELETE("/products/:id", productCtrl.DeleteProduct)
 
 			// Orders
+			protected.GET("/orders/:id", orderCtrl.GetOrderByID)
 			protected.POST("/orders", orderCtrl.CreateOrder)
 			protected.GET("/orders", orderCtrl.GetMyOrders)
 			protected.PUT("/orders/:id/status", orderCtrl.UpdateOrderStatus)

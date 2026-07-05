@@ -134,3 +134,52 @@ func (pc *ProductController) CreateProduct(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, product)
 }
+
+// ── UpdateProduct ─────────────────────────────────────────────────────────────
+// PUT /api/products/:id  (protected)
+func (pc *ProductController) UpdateProduct(c *gin.Context) {
+	id := c.Param("id")
+	var req createProductRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var product models.Product
+	if err := pc.DB.First(&product, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "product not found"})
+		return
+	}
+
+	product.Name = req.Name
+	product.Category = req.Category
+	product.BasePrice = req.BasePrice
+	product.CostPrice = req.CostPrice
+	product.StockQuantity = req.StockQuantity
+	product.ImageURL = req.ImageURL
+
+	if err := pc.DB.Save(&product).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update product"})
+		return
+	}
+
+	c.JSON(http.StatusOK, product)
+}
+
+// ── DeleteProduct ─────────────────────────────────────────────────────────────
+// DELETE /api/products/:id  (protected)
+func (pc *ProductController) DeleteProduct(c *gin.Context) {
+	id := c.Param("id")
+
+	result := pc.DB.Delete(&models.Product{}, id)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete product"})
+		return
+	}
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "product not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "product deleted"})
+}

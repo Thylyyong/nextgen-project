@@ -113,3 +113,18 @@ func (oc *OrderController) UpdateOrderStatus(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "status updated"})
 }
+
+// ── GetOrderByID ──────────────────────────────────────────────────────────────
+// GET /api/orders/:id  (protected)
+func (oc *OrderController) GetOrderByID(c *gin.Context) {
+	id := c.Param("id")
+	userID, _ := c.Get("userID")
+
+	var order models.Order
+	if err := oc.DB.Preload("User").Where("id = ? AND user_id = ?", id, userID).First(&order).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "order not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, order)
+}
