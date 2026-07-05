@@ -58,20 +58,13 @@ func main() {
 	r := gin.Default()
 
 	// ── 6. Configure CORS safely ─────────────────────────────────────────────
-	// Restricts origins to known Flutter dev/prod origins only.
-	// Adjust AllowOrigins before deploying to production.
+	// AllowAllOrigins=true is fine for local development.
+	// ⚠️ Before production: switch to specific AllowOrigins list!
 	r.Use(cors.New(cors.Config{
-		AllowOrigins: []string{
-			"http://localhost:3000",  // Web debug
-			"http://localhost:8080",  // Swagger / Postman
-			"http://10.0.2.2:*",     // Android emulator
-			"capacitor://localhost",  // Capacitor / Ionic wrapper
-			"ionic://localhost",
-		},
+		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "Accept"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
 	}))
 
 	// ── 7. Route groups ───────────────────────────────────────────────────────
